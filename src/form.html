@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario para Nuevo Jugador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Nuevo Jugador</h2>
+        
+        <!-- Formulario para agregar un jugador -->
+        <form id="addJugadorForm">
+            <input type="text" id="nombre" class="form-control mb-2" placeholder="Nombre" required><br>
+            <input type="text" id="equipo" class="form-control mb-2" placeholder="Equipo" required><br>
+            <input type="text" id="posicion" class="form-control mb-2" placeholder="Posición" required><br>
+            <input type="number" id="edad" class="form-control mb-2" placeholder="Edad" required><br>
+            <button type="submit" class="btn btn-primary">Agregar Jugador</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Enviar el formulario de nuevo jugador a la API
+        $('#addJugadorForm').submit(function(event) {
+            event.preventDefault();
+            
+            const nuevoJugador = {
+                nombre: $('#nombre').val(),
+                equipo: $('#equipo').val(),
+                posicion: $('#posicion').val(),
+                edad: $('#edad').val()
+            };
+
+            $.post('http://localhost:8000/api/jugadores/', nuevoJugador, function() {
+                alert('Jugador agregado exitosamente');
+                window.close();  // Cerrar la ventana después de agregar el jugador
+            });
+        });
+    </script>
+</body>
+</html>

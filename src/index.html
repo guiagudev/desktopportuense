@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Jugadores</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Gestión de Jugadores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
+    <div class="container mt-5">
+        <h1>Listado de Jugadores</h1>
+        
+        <!-- Botón para abrir la ventana del formulario -->
+        <button id="openFormButton" class="btn btn-primary">Agregar Nuevo Jugador</button>
+        
+        <ul id="jugadoresList" class="list-group mt-4">
+            <!-- Aquí se cargará la lista de jugadores -->
+        </ul>
+    </div>
 
-<div class="container mt-5">
-    <h1>Base de Datos de Jugadores</h1>
-    
-    <h3>Agregar Nuevo Jugador</h3>
-    <form id="addJugadorForm">
-        <input type="text" id="nombre" class="form-control" placeholder="Nombre" required><br>
-        <input type="text" id="equipo" class="form-control" placeholder="Equipo" required><br>
-        <input type="text" id="posicion" class="form-control" placeholder="Posición" required><br>
-        <input type="number" id="edad" class="form-control" placeholder="Edad" required><br>
-        <button type="submit" class="btn btn-primary">Añadir Jugador</button>
-    </form>
-    
-    
-    <h3 class="mt-5">Jugadores Existentes</h3>
-    <ul id="jugadoresList" class="list-group">
-        <!-- Aquí aparecerán los jugadores -->
-    </ul>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="renderer.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Enviar mensaje a Electron para abrir el formulario
+        $('#openFormButton').click(function() {
+            window.api.openFormWindow();  // Usamos la API que definimos en el main
+        });
+    </script>
 </body>
 </html>
