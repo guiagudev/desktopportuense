@@ -46,8 +46,10 @@ function eliminarJugador(id) {
 
 // Editar un jugador (aquí puedes agregar una interfaz de edición si lo necesitas)
 function editarJugador(id) {
-    // Implementar la lógica para editar un jugador
+    console.log("Editando jugador con ID:", id);
+    window.api.openEditWindow(id);
 }
+
 
 $(document).ready(function() {
     cargarJugadores();
