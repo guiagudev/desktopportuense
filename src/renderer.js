@@ -7,9 +7,9 @@ function cargarJugadores() {
         data.forEach(jugador => {
             $('#jugadoresList').append(`
                 <li class="list-group-item">
-                    ${jugador.nombre} - ${jugador.equipo} - ${jugador.posicion} - ${jugador.edad} años
+                    ${jugador.nombre} ${jugador.p_apellido} ${jugador.s_apellido} - ${jugador.equipo} - ${jugador.posicion} - ${jugador.edad} años
                     <button class="btn btn-danger btn-sm float-right ml-2" onclick="eliminarJugador(${jugador.id})">Eliminar</button>
-                    <button class="btn btn-warning btn-sm float-right" onclick="editarJugador(${jugador.id})">Editar</button>
+                    <button class="btn btn-danger btn-sm float-right" onclick="editarJugador(${jugador.id})">Editar</button>
                 </li>
             `);
         });
@@ -22,6 +22,8 @@ $('#addJugadorForm').submit(function(event) {
     
     const nuevoJugador = {
         nombre: $('#nombre').val(),
+        primer_apellido: $('#p_apellido').val(),
+        segundo_apellido: $('#s_apellido').val(),
         equipo: $('#equipo').val(),
         posicion: $('#posicion').val(),
         edad: $('#edad').val()
