@@ -19,6 +19,7 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 }
 
+
 function createJugadorWindow(jugador) {
     editWindow = new BrowserWindow({
         width: 400,

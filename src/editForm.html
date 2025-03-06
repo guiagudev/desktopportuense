@@ -16,16 +16,34 @@
                 <input type="text" class="form-control" id="nombre" required>
             </div>
             <div class="mb-3">
-                <label for="equipo" class="form-label">Equipo:</label>
-                <input type="text" class="form-control" id="equipo" required>
+                <label for="p_apellido" class="form-label">Apellido 1:</label>
+                <input type="text" class="form-control" id="p_apellido" required>
             </div>
+            <div class="mb-3">
+                <label for="s_apellido" class="form-label">Apellido 2:</label>
+                <input type="text" class="form-control" id="s_apellido">
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría:</label>
+                <select class="form-control" id="categoria" required>
+                    <option value="">Selecciona una categoría</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="subcategoria" class="form-label">Subcategoría:</label>
+                <select class="form-control" id="subcategoria" required>
+                    <option value="">Selecciona una subcategoría</option>
+                </select>
+            </div>
+            <label>Equipo:</label>
+            <div id="equipo-radio-buttons"></div><br>
             <div class="mb-3">
                 <label for="posicion" class="form-label">Posición:</label>
                 <input type="text" class="form-control" id="posicion" required>
             </div>
             <div class="mb-3">
                 <label for="edad" class="form-label">Edad:</label>
-                <input type="text" class="form-control" id="edad" required>
+                <input type="number" class="form-control" id="edad" required>
             </div>
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </form>
