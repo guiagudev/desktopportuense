@@ -20,7 +20,13 @@ function createMainWindow() {
 }
 
 
+let createWindowOpen = false;
+
 function createJugadorWindow(jugador) {
+    if (createWindowOpen) return;  // Evita crear la ventana si ya está abierta
+    
+    createWindowOpen = true; // Marca la ventana como abierta
+    
     editWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -38,7 +44,13 @@ function createJugadorWindow(jugador) {
     editWindow.webContents.once('did-finish-load', () => {
         editWindow.webContents.send('load-jugador-data', jugador);
     });
+
+    // Resetea la variable cuando la ventana se cierra
+    editWindow.on('closed', () => {
+        createWindowOpen = false;
+    });
 }
+
 function createDetailWindow(jugador) {
     const detailWindow = new BrowserWindow({
         width: 400,
