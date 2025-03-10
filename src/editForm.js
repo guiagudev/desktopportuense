@@ -1,86 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Obtener las opciones de categorías, subcategorías y equipos del backend
-    fetch("http://127.0.0.1:8000/api/jugadores/opciones/")
-        .then(response => response.json())
-        .then(data => {
-            const selectCategoria = document.getElementById("categoria");
-            const selectSubcategoria = document.getElementById("subcategoria");
-            const equipoRadios = document.getElementById("equipo-radio-buttons");
-
-            // Llenar el dropdown de categorías
-            data.categorias.forEach(categoria => {
-                const option = document.createElement("option");
-                option.value = categoria[0];
-                option.textContent = categoria[1];
-                selectCategoria.appendChild(option);
-            });
-
-            // Llenar el dropdown de subcategorías
-            data.subcategorias.forEach(subcategoria => {
-                const option = document.createElement("option");
-                option.value = subcategoria[0];
-                option.textContent = subcategoria[1];
-                selectSubcategoria.appendChild(option);
-            });
-
-            // Llenar los radio buttons de equipos
-            data.equipos.forEach(equipo => {
-                const label = document.createElement("label");
-                const radioButton = document.createElement("input");
-
-                radioButton.type = "radio"; // Usamos radio button para solo permitir una selección
-                radioButton.name = "equipo"; // Todos tienen el mismo nombre, lo que asegura que solo uno sea seleccionable
-                radioButton.value = equipo[0]; // El valor de cada equipo ('M' o 'F')
-
-                label.appendChild(radioButton);
-                label.appendChild(document.createTextNode(" " + equipo[1])); // El nombre del equipo
-                equipoRadios.appendChild(label);
-                equipoRadios.appendChild(document.createElement("br"));
-            });
-        })
-        .catch(error => console.error("Error cargando opciones:", error));
-});
-
-window.api.receiveJugadorData((jugador) => {
-    console.log("Datos del jugador recibido:", jugador);
-
-    if (jugador) {
+document.addEventListener('DOMContentLoaded', () => {
+    // Recibir los datos del jugador desde el proceso principal
+    window.api.receiveJugadorData((jugador) => {
         document.getElementById('jugador-id').value = jugador.id;
         document.getElementById('nombre').value = jugador.nombre;
         document.getElementById('p_apellido').value = jugador.p_apellido;
         document.getElementById('s_apellido').value = jugador.s_apellido;
-
-        const categoriaSelect = document.getElementById('categoria');
-        if (categoriaSelect) {
-            [...categoriaSelect.options].forEach(option => {
-                if (option.value === jugador.categoria) {
-                    option.selected = true;
-                }
-            });
-        }
-
-        const subcategoriaSelect = document.getElementById('subcategoria');
-        if (subcategoriaSelect) {
-            [...subcategoriaSelect.options].forEach(option => {
-                if (option.value === jugador.subcategoria) {
-                    option.selected = true;
-                }
-            });
-        }
-
-        // Establecer el radio button del equipo correctamente
-        const equipoRadios = document.querySelectorAll('input[name="equipo"]');
-        equipoRadios.forEach(radio => {
-            if (radio.value === jugador.equipo) {
-                radio.checked = true;
-            }
-        });
-
+        document.getElementById('categoria').value = jugador.categoria;
+        document.getElementById('subcategoria').value = jugador.subcategoria;
         document.getElementById('posicion').value = jugador.posicion;
         document.getElementById('edad').value = jugador.edad;
-    } else {
-        console.error("No se recibieron datos del jugador.");
-    }
+        document.getElementById('equipo').value = jugador.equipo;
+    });
+
+    // Enviar los cambios cuando el formulario se envíe
+    document.getElementById('edit-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const jugador = {
+            id: document.getElementById('jugador-id').value,
+            nombre: document.getElementById('nombre').value,
+            p_apellido: document.getElementById('p_apellido').value,
+            s_apellido: document.getElementById('s_apellido').value,
+            categoria: document.getElementById('categoria').value,
+            subcategoria: document.getElementById('subcategoria').value,
+            posicion: document.getElementById('posicion').value,
+            equipo : document.querySelector('input[name="equipo"]:checked').value,
+            edad: document.getElementById('edad').value,
+        };
+
+        // Enviar los datos al proceso principal para actualizar el jugador
+        window.api.updateJugador(jugador);
+    });
 });
-
-
