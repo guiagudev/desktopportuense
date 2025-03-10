@@ -43,47 +43,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.api.receiveJugadorData((jugador) => {
     console.log("Datos del jugador recibido:", jugador);
-    console.log("Categoría recibida:", jugador.categoria);
-    console.log("Subcategoría recibida:", jugador.subcategoria);
 
-    document.getElementById('jugador-id').value = jugador.id;
-    document.getElementById('nombre').value = jugador.nombre;
-    document.getElementById('p_apellido').value = jugador.p_apellido;
-    document.getElementById('s_apellido').value = jugador.s_apellido;
+    if (jugador) {
+        document.getElementById('jugador-id').value = jugador.id;
+        document.getElementById('nombre').value = jugador.nombre;
+        document.getElementById('p_apellido').value = jugador.p_apellido;
+        document.getElementById('s_apellido').value = jugador.s_apellido;
 
-    const categoriaSelect = document.getElementById('categoria');
-    if (categoriaSelect) {
-        console.log("Intentando asignar categoría:", jugador.categoria);
-        [...categoriaSelect.options].forEach(option => {
-            if (option.value === jugador.categoria) {
-                option.selected = true;
-            }
-        });
-    } else {
-        console.error("Elemento #categoria no encontrado en el DOM.");
-    }
-
-    const subcategoriaSelect = document.getElementById('subcategoria');
-    if (subcategoriaSelect) {
-        console.log("Intentando asignar subcategoría:", jugador.subcategoria);
-        [...subcategoriaSelect.options].forEach(option => {
-            if (option.value === jugador.subcategoria) {
-                option.selected = true;
-            }
-        });
-    } else {
-        console.error("Elemento #subcategoria no encontrado en el DOM.");
-    }
-
-    // Establecer el radio button del equipo correctamente
-    const equipoRadios = document.querySelectorAll('input[name="equipo"]');
-    equipoRadios.forEach(radio => {
-        if (radio.value === jugador.equipo) {
-            radio.checked = true;
+        const categoriaSelect = document.getElementById('categoria');
+        if (categoriaSelect) {
+            [...categoriaSelect.options].forEach(option => {
+                if (option.value === jugador.categoria) {
+                    option.selected = true;
+                }
+            });
         }
-    });
 
-    document.getElementById('posicion').value = jugador.posicion;
-    document.getElementById('edad').value = jugador.edad;
+        const subcategoriaSelect = document.getElementById('subcategoria');
+        if (subcategoriaSelect) {
+            [...subcategoriaSelect.options].forEach(option => {
+                if (option.value === jugador.subcategoria) {
+                    option.selected = true;
+                }
+            });
+        }
+
+        // Establecer el radio button del equipo correctamente
+        const equipoRadios = document.querySelectorAll('input[name="equipo"]');
+        equipoRadios.forEach(radio => {
+            if (radio.value === jugador.equipo) {
+                radio.checked = true;
+            }
+        });
+
+        document.getElementById('posicion').value = jugador.posicion;
+        document.getElementById('edad').value = jugador.edad;
+    } else {
+        console.error("No se recibieron datos del jugador.");
+    }
 });
+
 

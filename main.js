@@ -74,6 +74,13 @@ function createDetailWindow(jugador) {
   
 
 function createEditWindow(jugador) {
+    if (editWindow && !editWindow.isDestroyed()) {
+        // Si ya existe la ventana, solo enviamos los datos para actualizarla
+        editWindow.webContents.send('load-jugador-data', jugador);
+        return;
+    }
+
+    // Si no existe la ventana, la creamos
     editWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -91,7 +98,12 @@ function createEditWindow(jugador) {
     editWindow.webContents.once('did-finish-load', () => {
         editWindow.webContents.send('load-jugador-data', jugador);
     });
+
+    editWindow.on('closed', () => {
+        createWindowOpen = false;
+    });
 }
+
 ipcMain.on('open-create-window', () => {
     createJugadorWindow();
 });
@@ -136,8 +148,10 @@ ipcMain.on('open-detail-window', async(event, jugadorId) => {
 
 ipcMain.on('open-edit-window', async (event, jugadorId) => {
     try {
+        console.log(`Intentando cargar datos del jugador con ID: ${jugadorId}`);
         const response = await fetch(`http://localhost:8000/api/jugadores/${jugadorId}/`);
         const jugador = await response.json();
+        console.log("Jugador cargado: ", jugador); // Muestra los datos del jugador que se cargaron
         createEditWindow(jugador);
     } catch (error) {
         console.error("Error al cargar jugador:", error);
@@ -146,8 +160,10 @@ ipcMain.on('open-edit-window', async (event, jugadorId) => {
 
 ipcMain.on('update-jugador', async (event, jugador) => {
     try {
+        console.log("Jugador a actualizar:", jugador);
+        
         const response = await fetch(`http://localhost:8000/api/jugadores/${jugador.id}/`, {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -155,12 +171,26 @@ ipcMain.on('update-jugador', async (event, jugador) => {
         });
 
         if (response.ok) {
+            console.log("Jugador actualizado con éxito");
+            const updatedJugador = await response.json();
+            console.log("Datos actualizados: ", updatedJugador); // Verificar los datos de la respuesta
+            
+            // Enviar mensaje a la ventana principal
             mainWindow.webContents.send('jugador-actualizado');
-            editWindow.close();
+            
+            // Cerrar la ventana de edición si no está destruida
+            if (editWindow && !editWindow.isDestroyed()) {
+                editWindow.close();
+            }
+        } else {
+            const errorMessage = await response.text();
+            console.error("Error al actualizar jugador: ", errorMessage);
         }
     } catch (error) {
         console.error("Error al actualizar jugador:", error);
     }
 });
+
+
 
 app.whenReady().then(createMainWindow);
