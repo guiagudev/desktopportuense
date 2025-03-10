@@ -39,6 +39,28 @@ function createJugadorWindow(jugador) {
         editWindow.webContents.send('load-jugador-data', jugador);
     });
 }
+function createDetailWindow(jugador) {
+    const detailWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        parent: mainWindow,
+        modal: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            enableRemoteModule: false
+        }
+    });
+
+    detailWindow.loadFile(path.join(__dirname, 'src', 'jugadorDetail.html'));
+
+    detailWindow.webContents.once('did-finish-load', () => {
+        // Pasa los datos del jugador al detalle de la ventana
+        detailWindow.webContents.send('load-jugador-data', jugador);
+    });
+}
+  
+
 function createEditWindow(jugador) {
     editWindow = new BrowserWindow({
         width: 400,
@@ -90,7 +112,15 @@ ipcMain.on('add-jugador', async (event, jugador) => {
 
     
 });
-
+ipcMain.on('open-detail-window', async(event, jugadorId) => {
+    try {
+        const response = await fetch(`http://localhost:8000/api/jugadores/${jugadorId}/`);
+        const jugador = await response.json();
+        createDetailWindow(jugador)
+    } catch(error) {
+        console.error("Error al cargar jugador: ",error)
+    }
+});
 
 ipcMain.on('open-edit-window', async (event, jugadorId) => {
     try {
