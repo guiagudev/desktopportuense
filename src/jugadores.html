@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Jugadores</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Base de Datos de Jugadores</h1>
+    <!-- Pestañas para filtrar por equipo -->
+    <ul class="nav nav-tabs" id="equipoTabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="masculino-tab" href="#">Masculino</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="femenino-tab" href="#">Femenino</a>
+        </li>
+    </ul>
+    
+    
+    <h3 class="mt-5">Jugadores Existentes</h3>
+    <ul id="jugadoresList" class="list-group">
+        <!-- Aquí aparecerán los jugadores -->
+         <script>
+            window.api.receiveJugadorActualizado(() => {
+                cargarJugadores();
+            })
+         </script>
+    </ul>
+    <button id="btnAbrirCrearJugador" class="btn btn-success mt-3">Añadir Jugador</button>
+
+    <script>
+        document.getElementById("btnAbrirCrearJugador").addEventListener("click", () => {
+            window.api.openCreateWindow();
+        });
+    </script>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>
