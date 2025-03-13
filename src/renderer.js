@@ -4,40 +4,39 @@ const apiUrl = "http://127.0.0.1:8000/api/jugadores/";
 // Variable global para almacenar el equipo actual
 let equipoActual = "M"; 
 
-// Función para obtener el Token desde Storage
-function getToken() {
-  return sessionStorage.getItem("access_token");
+async function getToken() {
+  return await window.api.getToken(); // Obtiene el token desde el proceso principal
 }
 
-// Cargar los jugadores desde la API con el equipo seleccionado
 async function cargarJugadores(equipo = equipoActual) {
-  equipoActual = equipo; // Actualizar la variable global
+  equipoActual = equipo;
   let url = apiUrl;
   if (equipo) {
-    url += `?equipo=${equipo}`; // Agregar parámetro de equipo si se especifica
+    url += `?equipo=${equipo}`;
   }
 
   try {
-    // Hacer la solicitud GET con el token en el header
+    const token = await getToken(); // Obtiene el token antes de hacer la solicitud
+
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getToken()}` // Usamos el token almacenado en sessionStorage
-      }
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : "",
+      },
     });
 
     if (!response.ok) {
-      throw new Error('Error al cargar los jugadores');
+      throw new Error("Error al cargar los jugadores");
     }
 
     const data = await response.json();
-    
-    // Verificar si se recibieron jugadores
+
+    // Mostrar los jugadores en la lista
+    $("#jugadoresList").empty();
     if (data.length === 0) {
       $("#jugadoresList").html("<li class='list-group-item'>No hay jugadores disponibles.</li>");
     } else {
-      $("#jugadoresList").empty();
       data.forEach((jugador) => {
         const segundoApellido = jugador.s_apellido ? jugador.s_apellido : "";
         $("#jugadoresList").append(`
@@ -58,45 +57,71 @@ async function cargarJugadores(equipo = equipoActual) {
   }
 }
 
+
+
 // Agregar un nuevo jugador
 $("#addJugadorForm").submit(function (event) {
   event.preventDefault();
 
   const nuevoJugador = {
-    nombre: $("#nombre").val(),
-    primer_apellido: $("#p_apellido").val(),
-    segundo_apellido: $("#s_apellido").val(),
-    equipo: $("#equipo").val(),
-    posicion: $("#posicion").val(),
-    edad: $("#edad").val(),
+      nombre: $("#nombre").val(),
+      primer_apellido: $("#p_apellido").val(),
+      segundo_apellido: $("#s_apellido").val(),
+      equipo: $("#equipo").val(),
+      posicion: $("#posicion").val(),
+      edad: $("#edad").val(),
   };
 
-  $.post(apiUrl, nuevoJugador, function () {
-    cargarJugadores(); // Se recarga con el equipo actual
-    $("#addJugadorForm")[0].reset();
+  const token = sessionStorage.getItem("access_token"); // Obtener el token
+
+  console.log("Token enviado", token);
+
+  $.ajax({
+      url: apiUrl,
+      type: "POST",
+      contentType: "application/json",
+      headers: {
+          "Authorization": `Token ${token}`  // 🔹 Agregar el token aquí
+      },
+      data: JSON.stringify(nuevoJugador),
+      success: function () {
+          cargarJugadores(); // Recarga la lista de jugadores
+          $("#addJugadorForm")[0].reset();
+      },
+      error: function (xhr, status, error) {
+          console.error("Error al agregar jugador:", xhr.responseText);
+      }
   });
 });
 
+
 // Eliminar un jugador
-function eliminarJugador(id) {
+async function eliminarJugador(id) {
+  const token =  await getToken();
   $.ajax({
     url: `${apiUrl}${id}/`,
     type: "DELETE",
+    headers: {
+      "Authorization": token ? `Bearer ${token}` : ""  // Incluye el token en los headers
+    },
     success: function () {
       cargarJugadores(); // Se recarga con el equipo actual
     },
   });
 }
 
-function detalleJugador(id) {
+async function detalleJugador(id) {
   console.log("Página de jugador con ID: ", id);
-  window.api.openDetailWindow(id);
+  const token = await getToken();
+  window.api.openDetailWindow(id,token);
 }
 
 // Editar un jugador
-function editarJugador(id) {
+async function editarJugador(id) {
   console.log("Editando jugador con ID:", id);
-  window.api.openEditWindow(id);
+  const token = await getToken();
+  window.api.openEditWindow(id,token);
+  
 }
 
 // Lógica para manejar el cambio de pestaña (Masculino/Femenino)

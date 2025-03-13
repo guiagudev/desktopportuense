@@ -1,46 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://127.0.0.1:8000/api/jugadores/opciones/")
-        .then(response => response.json())
-        .then(data => {
-            const selectCategoria = document.getElementById("categoria");
-            const selectSubcategoria = document.getElementById("subcategoria");
-            const equipoRadioContainer = document.getElementById("equipo-radio-buttons");
 
-            // Llenar el dropdown de categorías
-            data.categorias.forEach(categoria => {
-                let option = document.createElement("option");
-                option.value = categoria[0];  
-                option.textContent = categoria[1];  
-                selectCategoria.appendChild(option);
-            });
+// Función para obtener el token desde localStorage
+function getToken() {
+    return localStorage.getItem("access_token") || sessionStorage.getItem("access_token");
+}
 
-            // Llenar el dropdown de subcategorías
-            data.subcategorias.forEach(subcategoria => {
-                let option = document.createElement("option");
-                option.value = subcategoria[0];  
-                option.textContent = subcategoria[1];  
-                selectSubcategoria.appendChild(option);
-            });
-            data.equipos.forEach(equipo => {
-                let label = document.createElement("label");
-                let radioButton = document.createElement("input");
-                
-                radioButton.type = "radio";  // Usamos radio button para solo permitir una selección
-                radioButton.name = "equipo";  // Todos tienen el mismo nombre, lo que asegura que solo uno sea seleccionable
-                radioButton.value = equipo[0];  // El valor de cada equipo ('M' o 'F')
-                
-                label.appendChild(radioButton);
-                label.appendChild(document.createTextNode(" " + equipo[1]));  // El nombre del equipo
-                equipoRadioContainer.appendChild(label);
-                equipoRadioContainer.appendChild(document.createElement("br"));
-            });
-          
-        })
-        .catch(error => console.error("Error cargando opciones:", error));
-});
 document.getElementById('create-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     const nombre = document.getElementById('nombre').value;
     const p_apellido = document.getElementById('p_apellido').value;
     const s_apellido = document.getElementById('s_apellido').value;
@@ -52,17 +18,39 @@ document.getElementById('create-form').addEventListener('submit', (e) => {
         alert("Por favor, selecciona un equipo.");
         return;  // Detiene el envío si no se seleccionó ningún equipo
     }
+    
     const posicion = document.getElementById('posicion').value;
     const edad = document.getElementById('edad').value;
     
     const nuevoJugador = { nombre, p_apellido, s_apellido, categoria, subcategoria, equipo, posicion, edad };
 
+    // Obtener el token
+    const token = getToken();
     
-    console.log("Enviando nuevo jugador", nuevoJugador);
-    
-    // Enviar jugador al proceso principal
-    window.api.addJugador(nuevoJugador);
+    if (!token) {
+        alert("No se ha encontrado un token válido. Por favor, inicia sesión.");
+        return;
+    }
 
-    // Cerrar ventana después de enviar los datos
-    window.close();
+    // Hacer la solicitud POST para crear el jugador, incluyendo el token en los headers
+    fetch("http://127.0.0.1:8000/api/jugadores/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(nuevoJugador)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Jugador creado:", data);
+        window.api.addJugador(nuevoJugador);  // Llama al proceso principal para agregar el jugador
+
+        // Cerrar ventana después de enviar los datos
+        window.close();
+    })
+    .catch(error => {
+        console.error("Error al agregar el jugador:", error);
+        alert("Hubo un error al agregar el jugador.");
+    });
 });

@@ -24,25 +24,41 @@
             </div>
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoría:</label>
+                <label for="categoria" class="form-label">Categoría:</label>
                 <select class="form-control" id="categoria" required>
-                    <option value="">Selecciona una categoría</option>
+                    <option value="PREBEN">Prebenjamín</option>
+                    <option value="BEN">Benjamín</option>
+                    <option value="ALE">Alevín</option>
+                    <option value="INF">Infantil</option>
+                    <option value="CAD">Cadete</option>
+                    <option value="JUV">Juvenil</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="subcategoria" class="form-label">Subcategoría:</label>
                 <select class="form-control" id="subcategoria" required>
-                    <option value="">Selecciona una subcategoría</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
                 </select>
             </div>
             <label>Equipo:</label>
             <div id="equipo-radio-buttons"></div><br>
-            <div class="mb-3">
-                <label for="posicion" class="form-label">Posición:</label>
-                <input type="text" class="form-control" id="posicion" required>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="equipo" id="equipo-m" value="M">
+                <label class="form-check-label" for="equipo-m">Masculino</label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="equipo" id="equipo-f" value="F">
+                <label class="form-check-label" for="equipo-f">Femenino</label>
+            </div><br>
             <div class="mb-3">
                 <label for="edad" class="form-label">Edad:</label>
                 <input type="number" class="form-control" id="edad" required>
+            </div>
+            <div class="mb-3">
+                <label for="posicion" class="form-label">Posición:</label>
+                <input type="text" class="form-control" id="posicion" required>
             </div>
             <button type="submit" class="btn btn-primary">Añadir Jugador</button>
         </form>

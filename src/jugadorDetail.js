@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         console.log("Jugador recibido:", jugador);
+        const token = sessionStorage.getItem("access_token"); // O si lo usas de otra forma
+        console.log("Token utilizado para la solicitud del jugador:", token);
 
         // Actualizar los detalles en el HTML
         document.getElementById("jugadorNombre").textContent = `${jugador.nombre} ${jugador.p_apellido} ${jugador.s_apellido || ''}`;
