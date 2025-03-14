@@ -45,8 +45,9 @@ async function cargarJugadores(equipo = equipoActual) {
               ${jugador.nombre} ${jugador.p_apellido} ${segundoApellido}
             </a> - ${jugador.posicion} - ${jugador.edad} años -  ${jugador.categoria}
 
-            <button class="btn btn-danger btn-sm float-right ml-2" onclick="eliminarJugador(${jugador.id})">Eliminar</button>
+            
             <button class="btn btn-primary btn-sm float-right" onclick="editarJugador(${jugador.id})">Editar</button>
+            <button class="btn btn-danger btn-sm float-right ml-2" onclick="eliminarJugador(${jugador.id})">Eliminar</button>
           </li>
         `);
       });
@@ -60,40 +61,62 @@ async function cargarJugadores(equipo = equipoActual) {
 
 
 // Agregar un nuevo jugador
-$("#addJugadorForm").submit(function (event) {
-  event.preventDefault();
 
-  const nuevoJugador = {
-      nombre: $("#nombre").val(),
-      primer_apellido: $("#p_apellido").val(),
-      segundo_apellido: $("#s_apellido").val(),
-      equipo: $("#equipo").val(),
-      posicion: $("#posicion").val(),
-      edad: $("#edad").val(),
-  };
+// renderer.js
+const modal = document.getElementById('createJugadorModal');
+const btn = document.getElementById('openModalBtn'); // Botón para abrir el modal
+const span = document.getElementsByClassName('close')[0];
 
-  const token = sessionStorage.getItem("access_token"); // Obtener el token
+btn.onclick = function() {
+    modal.style.display = "block";
+}
 
-  console.log("Token enviado", token);
+span.onclick = function() {
+    modal.style.display = "none";
+}
 
-  $.ajax({
-      url: apiUrl,
-      type: "POST",
-      contentType: "application/json",
-      headers: {
-          "Authorization": `Token ${token}`  // 🔹 Agregar el token aquí
-      },
-      data: JSON.stringify(nuevoJugador),
-      success: function () {
-          cargarJugadores(); // Recarga la lista de jugadores
-          $("#addJugadorForm")[0].reset();
-      },
-      error: function (xhr, status, error) {
-          console.error("Error al agregar jugador:", xhr.responseText);
-      }
-  });
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+$("#createJugadorForm").submit(function (event) {
+    event.preventDefault();
+
+    const nuevoJugador = {
+        nombre: $("#nombre").val(),
+        primer_apellido: $("#p_apellido").val(),
+        segundo_apellido: $("#s_apellido").val(),
+        categoria: $("#categoria").val(),
+        subcategoria: $("#subcategoria").val(),
+        equipo: $("#equipo").val(),
+        posicion: $("#posicion").val(),
+        edad: $("#edad").val(),
+    };
+    console.log("Primer apellido:", nuevoJugador.p_apellido);
+    const token = sessionStorage.getItem("access_token");
+
+    $.ajax({
+        url: apiUrl, // Asegúrate de que apiUrl esté definida correctamente
+        type: "POST",
+        contentType: "application/json",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        data: JSON.stringify(nuevoJugador),
+        success: function (data) {
+            console.log("Jugador agregado con éxito:", data);
+            cargarJugadores(); // Recarga la lista de jugadores
+            modal.style.display = "none"; // Cerrar el modal
+            $("#createJugadorForm")[0].reset(); // Limpiar el formulario
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al agregar jugador:", xhr.responseText);
+            alert("Error al agregar jugador: " + xhr.responseText);
+        }
+    });
 });
-
 
 // Eliminar un jugador
 async function eliminarJugador(id) {
