@@ -117,7 +117,87 @@ $("#createJugadorForm").submit(function (event) {
         }
     });
 });
+// renderer.js
+async function editarJugador(id) {
+  const token = await getToken(); // Obtener el token antes de la solicitud
 
+  $.ajax({
+      url: `${apiUrl}${id}/`, // Asegurar que la URL tenga el formato correcto
+      type: "GET",
+      contentType: "application/json",
+      headers: {
+          "Authorization": token ? `Bearer ${token}` : "" // Incluir el token
+      },
+      success: function (jugador) {
+          // Llenar los campos del formulario con los datos del jugador
+          $("#editJugadorId").val(jugador.id);
+          $("#editNombre").val(jugador.nombre);
+          $("#editPApellido").val(jugador.p_apellido);
+          $("#editSApellido").val(jugador.s_apellido);
+          $("#editCategoria").val(jugador.categoria);
+          $("#editSubcategoria").val(jugador.subcategoria);
+          $("#editEquipo").val(jugador.equipo);
+          $("#editPosicion").val(jugador.posicion);
+          $("#editEdad").val(jugador.edad);
+
+          // Mostrar el modal
+          $("#editJugadorModal").show();
+      },
+      error: function (xhr, status, error) {
+          console.error("Error al obtener los datos del jugador:", xhr.responseText);
+          alert("Error al cargar los datos del jugador.");
+      }
+  });
+}
+
+$("#editJugadorForm").submit(function (event) {
+  event.preventDefault();
+
+  const id = $("#editJugadorId").val();
+  const jugadorActualizado = {
+      nombre: $("#editNombre").val(),
+      p_apellido: $("#editPApellido").val(),
+      s_apellido: $("#editSApellido").val(),
+      categoria: $("#editCategoria").val(),
+      subcategoria: $("#editSubcategoria").val(),
+      equipo: $("#editEquipo").val(),
+      posicion: $("#editPosicion").val(),
+      edad: $("#editEdad").val(),
+  };
+
+  const token = sessionStorage.getItem("access_token");
+
+  $.ajax({
+      url: `${apiUrl}${id}/`,
+      type: "PUT",
+      contentType: "application/json",
+      headers: {
+          "Authorization": `Bearer ${token}`
+      },
+      data: JSON.stringify(jugadorActualizado),
+      success: function (data) {
+          console.log("Jugador actualizado con éxito:", data);
+          cargarJugadores();
+          $("#editJugadorModal").css("display", "none"); // Ocultar modal
+      },
+      error: function (xhr, status, error) {
+          console.error("Error al actualizar jugador:", xhr.responseText);
+          alert("Error al actualizar jugador: " + xhr.responseText);
+      }
+  });
+});
+$("#closeEditModal").click(function () {
+  $("#editJugadorModal").hide();
+});
+
+window.onclick = function (event) {
+  if (event.target == document.getElementById('editJugadorModal')) {
+      document.getElementById('editJugadorModal').style.display = "none";
+  }
+  if (event.target == document.getElementById('createJugadorModal')) {
+      document.getElementById('createJugadorModal').style.display = "none";
+  }
+};
 // Eliminar un jugador
 async function eliminarJugador(id) {
   const token =  await getToken();
@@ -140,12 +220,7 @@ async function detalleJugador(id) {
 }
 
 // Editar un jugador
-async function editarJugador(id) {
-  console.log("Editando jugador con ID:", id);
-  const token = await getToken();
-  window.api.openEditWindow(id,token);
-  
-}
+
 
 // Lógica para manejar el cambio de pestaña (Masculino/Femenino)
 $(document).ready(function () {

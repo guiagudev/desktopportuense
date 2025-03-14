@@ -41,6 +41,63 @@
     </script>
 </div>
 
+
+
+<div id="editJugadorModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeEditModal">&times;</span>
+        <h2>Editar Jugador</h2>
+        <form id="editJugadorForm">
+            <input type="hidden" id="editJugadorId"> 
+            <div class="mb-3">
+                <label for="editNombre" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="editNombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="editPApellido" class="form-label">Apellido 1:</label>
+                <input type="text" class="form-control" id="editPApellido" required>
+            </div>
+            <div class="mb-3">
+                <label for="editSApellido" class="form-label">Apellido 2:</label>
+                <input type="text" class="form-control" id="editSApellido">
+            </div>
+            <div class="mb-3">
+                <label for="editCategoria" class="form-label">Categoría:</label>
+                <select class="form-control" id="editCategoria" required>
+                    <option value="PREBEN">Prebenjamín</option>
+                    <option value="BEN">Benjamín</option>
+                    <option value="ALE">Alevín</option>
+                    <option value="INF">Infantil</option>
+                    <option value="CAD">Cadete</option>
+                    <option value="JUV">Juvenil</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="editSubcategoria" class="form-label">Subcategoría:</label>
+                <select class="form-control" id="editSubcategoria" required>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="editEquipo" class="form-label">Equipo:</label>
+                <select class="form-control" id="editEquipo" required>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                </select>
+            </div>
+            <label for="editEdad" class="form-label">Edad:</label>
+            <input type="number" class="form-control" id="editEdad" required>
+            <div class="mb-3">
+                <label for="editPosicion" class="form-label">Posición:</label>
+                <input type="text" class="form-control" id="editPosicion" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
 <div id="createJugadorModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
