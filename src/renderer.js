@@ -214,10 +214,44 @@ async function eliminarJugador(id) {
 }
 
 async function detalleJugador(id) {
-  console.log("Página de jugador con ID: ", id);
+  console.log("Mostrando detalles del jugador con ID:", id);
+  
   const token = await getToken();
-  window.api.openDetailWindow(id,token);
+
+  try {
+      const response = await fetch(`${apiUrl}${id}/`, {
+          method: "GET",
+          headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+          }
+      });
+
+      if (!response.ok) {
+          throw new Error("Error obteniendo los datos del jugador");
+      }
+
+      const jugador = await response.json();
+
+      // Rellenar datos en el modal
+      document.getElementById("jugadorTitle").textContent = `Detalles de ${jugador.nombre}`;
+      document.getElementById("jugadorNombre").textContent = jugador.nombre;
+      document.getElementById("jugadorEquipo").textContent = jugador.equipo;
+      document.getElementById("jugadorCategoria").textContent = jugador.categoria;
+      document.getElementById("jugadorSubcategoria").textContent = jugador.subcategoria;
+      document.getElementById("jugadorPosicion").textContent = jugador.posicion;
+      document.getElementById("jugadorImagen").src = jugador.imagen_url || "ruta_default.jpg";
+
+      // Mostrar el modal con Bootstrap
+      const modal = new bootstrap.Modal(document.getElementById("detailJugadorModal"));
+      modal.show();
+
+  } catch (error) {
+      console.error("Error al obtener los detalles del jugador:", error);
+  }
 }
+
+
 
 // Editar un jugador
 

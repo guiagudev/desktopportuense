@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
+<a href="index.html">Cerrar Sesión </a>
 <div class="container mt-5">
     <h1>Base de Datos de Jugadores</h1>
     <!-- Pestañas para filtrar por equipo -->
@@ -97,6 +97,37 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="detailJugadorModal" tabindex="-1" aria-labelledby="jugadorTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        
+        <!-- Botón de cierre -->
+        <div class="modal-header">
+          <h5 id="jugadorTitle" class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+  
+        <!-- Cuerpo del modal -->
+        <div class="modal-body text-center">
+          <p><strong>Nombre: </strong><span id="jugadorNombre"></span></p>
+          <p><strong>Equipo: </strong><span id="jugadorEquipo"></span></p>
+          <p><strong>Categoría: </strong><span id="jugadorCategoria"></span></p>
+          <p><strong>Subcategoría:</strong><span id="jugadorSubcategoria"></span></p>
+          <p><strong>Posición: </strong><span id="jugadorPosicion"></span></p>
+          <img id="jugadorImagen" class="img-fluid rounded" src="" alt="Foto del jugador">
+        </div>
+  
+        <!-- Footer del modal -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
 
 <div id="createJugadorModal" class="modal">
     <div class="modal-content">
