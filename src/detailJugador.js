@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const token = await window.api.getToken();  
 
+        // Obtener detalles del jugador
         const responseJugador = await fetch(`${jugadoresUrl}${jugadorId}/`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const jugador = await responseJugador.json();
 
+        // Mostrar los datos del jugador en la interfaz
         document.getElementById("jugadorTitle").textContent = `Detalles de ${jugador.nombre}`;
         document.getElementById("jugadorNombre").textContent = jugador.nombre;
         document.getElementById("jugadorEquipo").textContent = jugador.equipo;
@@ -28,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("jugadorPosicion").textContent = jugador.posicion;
         document.getElementById("jugadorImagen").src = jugador.imagen_url;
 
+        // Función para cargar las carpetas del jugador
         async function cargarCarpetas() {
             try {
                 const response = await fetch(`${carpetasUrl}?jugador_id=${jugadorId}`, {
@@ -54,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     const btnGroup = document.createElement("div");
 
-                    // Botón Eliminar
+                    // Botón para eliminar carpeta
                     const btnEliminar = document.createElement("button");
                     btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
                     btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
@@ -70,6 +73,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error("Error:", error);
             }
         }
+
+        // Función para crear una nueva carpeta
         window.crearCarpeta = async function () {
             const nombre = document.getElementById("nuevaCarpetaNombre").value.trim();
             if (!nombre) {
@@ -97,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         };
 
-        // Función para habilitar la edición
+        // Función para habilitar la edición del nombre de la carpeta
         async function habilitarEdicion(id, nombreActual) {
             const span = document.getElementById(`span-${id}`);
             const currentText = span.textContent;
@@ -118,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             input.focus();
         }
 
-        // Función para guardar la edición
+        // Función para guardar la edición del nombre de la carpeta
         async function guardarEdicion(id, nuevoNombre, span) {
             if (!nuevoNombre || nuevoNombre.trim() === "") {
                 alert("El nombre de la carpeta no puede estar vacío.");
@@ -155,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
 
-        // Eliminar carpeta
+        // Función para eliminar una carpeta
         window.eliminarCarpeta = async function (id) {
             if (!confirm("¿Estás seguro de que deseas eliminar esta carpeta?")) return;
 
