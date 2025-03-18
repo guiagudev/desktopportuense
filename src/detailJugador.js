@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
-    const jugadorId = params.get("id");
+    const jugadorId = parseInt(params.get("id"), 10);
     const carpetasUrl = 'http://127.0.0.1:8000/api/carpetas/';
     const jugadoresUrl = 'http://127.0.0.1:8000/api/jugadores/';
 
@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const token = await window.api.getToken();  
 
-        // Obtener detalles del jugador
         const responseJugador = await fetch(`${jugadoresUrl}${jugadorId}/`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
@@ -27,9 +26,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("jugadorCategoria").textContent = jugador.categoria;
         document.getElementById("jugadorSubcategoria").textContent = jugador.subcategoria;
         document.getElementById("jugadorPosicion").textContent = jugador.posicion;
-        document.getElementById("jugadorImagen").src = jugador.imagen_url || "ruta_default.jpg";
+        document.getElementById("jugadorImagen").src = jugador.imagen_url;
 
-        // Función para cargar carpetas
         async function cargarCarpetas() {
             try {
                 const response = await fetch(`${carpetasUrl}?jugador_id=${jugadorId}`, {
@@ -44,18 +42,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 carpetas.forEach(carpeta => {
                     const li = document.createElement("li");
+                    li.id = `carpeta-${carpeta.id}`;
                     li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
 
+                    // Crear el nombre de la carpeta como un span inicialmente
                     const span = document.createElement("span");
                     span.textContent = carpeta.nombre;
+                    span.id = `span-${carpeta.id}`;
+                    span.classList.add("editable-span");
+                    span.onclick = () => habilitarEdicion(carpeta.id, carpeta.nombre);
 
                     const btnGroup = document.createElement("div");
-
-                    // Botón Editar
-                    const btnEditar = document.createElement("button");
-                    btnEditar.classList.add("btn", "btn-sm", "btn-warning", "me-2");
-                    btnEditar.innerHTML = '<i class="bi bi-pencil"></i>';
-                    btnEditar.onclick = () => editarCarpeta(carpeta.id, carpeta.nombre);
 
                     // Botón Eliminar
                     const btnEliminar = document.createElement("button");
@@ -63,9 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
                     btnEliminar.onclick = () => eliminarCarpeta(carpeta.id);
 
-                    btnGroup.appendChild(btnEditar);
                     btnGroup.appendChild(btnEliminar);
-
                     li.appendChild(span);
                     li.appendChild(btnGroup);
 
@@ -75,8 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error("Error:", error);
             }
         }
-
-        // Crear carpeta
         window.crearCarpeta = async function () {
             const nombre = document.getElementById("nuevaCarpetaNombre").value.trim();
             if (!nombre) {
@@ -104,10 +97,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         };
 
-        // Editar carpeta
-        window.editarCarpeta = async function (id, nombreActual) {
-            const nuevoNombre = prompt("Nuevo nombre de la carpeta:", nombreActual);
-            if (!nuevoNombre || nuevoNombre.trim() === "") return;
+        // Función para habilitar la edición
+        async function habilitarEdicion(id, nombreActual) {
+            const span = document.getElementById(`span-${id}`);
+            const currentText = span.textContent;
+            
+            // Reemplazar el span por un input
+            const input = document.createElement("input");
+            input.type = "text";
+            input.value = currentText;
+            input.classList.add("form-control");
+            input.onblur = () => guardarEdicion(id, input.value, span);  // Cuando se pierde el foco, guardar la edición
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    guardarEdicion(id, input.value, span);
+                }
+            };
+
+            span.replaceWith(input);
+            input.focus();
+        }
+
+        // Función para guardar la edición
+        async function guardarEdicion(id, nuevoNombre, span) {
+            if (!nuevoNombre || nuevoNombre.trim() === "") {
+                alert("El nombre de la carpeta no puede estar vacío.");
+                return;
+            }
 
             try {
                 const token = await window.api.getToken();
@@ -122,11 +138,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (!response.ok) throw new Error("Error editando carpeta");
 
-                cargarCarpetas();  // Actualizar lista
+                // Reemplazar el input por el nuevo nombre
+                const updatedSpan = document.createElement("span");
+                updatedSpan.textContent = nuevoNombre;
+                updatedSpan.classList.add("editable-span");
+                updatedSpan.id = `span-${id}`;
+                updatedSpan.onclick = () => habilitarEdicion(id, nuevoNombre); // Rehabilitar edición si se hace clic de nuevo
+
+                span.replaceWith(updatedSpan);
+
+                // Recargar carpetas
+                await cargarCarpetas();
+
             } catch (error) {
                 console.error("Error:", error);
             }
-        };
+        }
 
         // Eliminar carpeta
         window.eliminarCarpeta = async function (id) {
@@ -141,19 +168,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (!response.ok) throw new Error("Error eliminando carpeta");
 
-                cargarCarpetas();  // Actualizar lista
+                await cargarCarpetas();  // Recargar la lista automáticamente
             } catch (error) {
                 console.error("Error:", error);
             }
         };
 
-        // Evento para abrir el modal y cargar carpetas
-        const btnAbrirCarpetas = document.querySelector("[data-bs-target='#carpetasModal']");
-        if (btnAbrirCarpetas) {
-            btnAbrirCarpetas.addEventListener("click", cargarCarpetas);
-        } else {
-            console.error("Botón para abrir carpetas no encontrado.");
-        }
+        // Cargar carpetas cuando se abra el modal o página
+        cargarCarpetas();
 
     } catch (error) {
         console.error("Error:", error);
