@@ -28,7 +28,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("jugadorCategoria").textContent = jugador.categoria;
         document.getElementById("jugadorSubcategoria").textContent = jugador.subcategoria;
         document.getElementById("jugadorPosicion").textContent = jugador.posicion;
-        document.getElementById("jugadorImagen").src = jugador.imagen_url;
+        document.getElementById("jugadorImagen").src = jugador.imagen;
+        console.log("Datos del jugador:", jugador);
+        console.log("Imagen URL:", jugador.imagen_url);
+
 
         // Función para cargar las carpetas del jugador
         async function cargarCarpetas() {

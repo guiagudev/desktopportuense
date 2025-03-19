@@ -8,14 +8,16 @@
 </head>
 <body>
     <div class="container mt-4">
+        <div class="position-relative">
+            <img id="jugadorImagen" class="img-fluid rounded-circle w-25 position-absolute top-4 end-0" src="" alt="Foto del jugador" />
+        </div>
         <h2 id="jugadorTitle"></h2>
         <p><strong>Nombre: </strong><span id="jugadorNombre"></span></p>
         <p><strong>Equipo: </strong><span id="jugadorEquipo"></span></p>
         <p><strong>Categoría: </strong><span id="jugadorCategoria"></span></p>
         <p><strong>Subcategoría:</strong><span id="jugadorSubcategoria"></span></p>
         <p><strong>Posición: </strong><span id="jugadorPosicion"></span></p>
-        <img id="jugadorImagen" class="img-fluid rounded" src="" alt="Foto del jugador">
-
+       
         <h4 class="mt-4">Carpetas</h4>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carpetasModal">
             Gestionar Carpetas

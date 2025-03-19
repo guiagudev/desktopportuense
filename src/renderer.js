@@ -82,41 +82,53 @@ window.onclick = function(event) {
 }
 
 $("#createJugadorForm").submit(function (event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const nuevoJugador = {
-        nombre: $("#nombre").val(),
-        primer_apellido: $("#p_apellido").val(),
-        segundo_apellido: $("#s_apellido").val(),
-        categoria: $("#categoria").val(),
-        subcategoria: $("#subcategoria").val(),
-        equipo: $("#equipo").val(),
-        posicion: $("#posicion").val(),
-        edad: $("#edad").val(),
-    };
-    console.log("Primer apellido:", nuevoJugador.p_apellido);
-    const token = sessionStorage.getItem("access_token");
+  // Creamos un objeto FormData
+  const formData = new FormData();
 
-    $.ajax({
-        url: apiUrl, // Asegúrate de que apiUrl esté definida correctamente
-        type: "POST",
-        contentType: "application/json",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        },
-        data: JSON.stringify(nuevoJugador),
-        success: function (data) {
-            console.log("Jugador agregado con éxito:", data);
-            cargarJugadores(); // Recarga la lista de jugadores
-            modal.style.display = "none"; // Cerrar el modal
-            $("#createJugadorForm")[0].reset(); // Limpiar el formulario
-        },
-        error: function (xhr, status, error) {
-            console.error("Error al agregar jugador:", xhr.responseText);
-            alert("Error al agregar jugador: " + xhr.responseText);
-        }
-    });
+  // Añadimos los campos del formulario a FormData
+  formData.append("nombre", $("#nombre").val());
+  formData.append("primer_apellido", $("#p_apellido").val());
+  formData.append("segundo_apellido", $("#s_apellido").val());
+  formData.append("categoria", $("#categoria").val());
+  formData.append("subcategoria", $("#subcategoria").val());
+  formData.append("equipo", $("#equipo").val());
+  formData.append("posicion", $("#posicion").val());
+  formData.append("edad", $("#edad").val());
+
+  // Si el campo de imagen tiene un archivo, lo añadimos al FormData
+  const imagenFile = $("#imagen")[0].files[0];
+  if (imagenFile) {
+      formData.append("imagen", imagenFile);
+  }
+
+  // Obtener el token desde el almacenamiento de sesión
+  const token = sessionStorage.getItem("access_token");
+
+  // Hacemos la solicitud con FormData
+  $.ajax({
+      url: apiUrl, // Asegúrate de que apiUrl esté definida correctamente
+      type: "POST",
+      headers: {
+          "Authorization": `Bearer ${token}`,
+      },
+      data: formData,
+      contentType: false, // Importante para no establecer contentType automáticamente
+      processData: false, // Importante para evitar que jQuery procese los datos
+      success: function (data) {
+          console.log("Jugador agregado con éxito:", data);
+          cargarJugadores(); // Recargar la lista de jugadores
+          modal.style.display = "none"; // Cerrar el modal
+          $("#createJugadorForm")[0].reset(); // Limpiar el formulario
+      },
+      error: function (xhr, status, error) {
+          console.error("Error al agregar jugador:", xhr.responseText);
+          alert("Error al agregar jugador: " + xhr.responseText);
+      }
+  });
 });
+
 // Modal para editar un jugador
 async function editarJugador(id) {
   const token = await getToken(); // Obtener el token antes de la solicitud
