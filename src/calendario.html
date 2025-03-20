@@ -44,144 +44,249 @@
     </div>
 
     <!-- Modal para crear evento -->
-    <div
-      id="createEventModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="createEventModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="createEventModalLabel">Crear Evento</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="createEventForm">
-              <div class="mb-3">
-                <label for="eventTitle" class="form-label"
-                  >Título del Evento</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="eventTitle"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="eventDescription" class="form-label"
-                  >Descripción</label
-                >
-                <textarea
-                  class="form-control"
-                  id="eventDescription"
-                  rows="3"
-                  required
-                ></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="eventStart" class="form-label"
-                  >Fecha de Inicio</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  id="eventStart"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="eventEnd" class="form-label">Fecha de Fin</label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  id="eventEnd"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-primary">
-                Crear Evento
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+  <!-- Modal para crear o editar evento -->
+<div
+id="createEventModal"
+class="modal fade"
+tabindex="-1"
+role="dialog"
+aria-labelledby="createEventModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="createEventModalLabel">Crear Evento</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
     </div>
+    <div class="modal-body">
+      <form id="createEventForm">
+        <div class="mb-3">
+          <label for="equipo1" class="form-label">Equipo 1</label>
+          <input
+            type="text"
+            class="form-control"
+            id="equipo1"
+            value="Portuense F.C."
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="equipo2" class="form-label">Equipo 2</label>
+          <input type="text" class="form-control" id="equipo2" required />
+        </div>
+        <div class="mb-3">
+          <label for="eventDescription" class="form-label"
+            >Descripción</label
+          >
+          <textarea
+            class="form-control"
+            id="eventDescription"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="eventDate" class="form-label">Fecha</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="eventDate"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          Crear Evento
+        </button>
+      </form>
+      
+      <!-- Botón para eliminar evento -->
+      <button id="deleteEventBtn" class="btn btn-danger mt-3">
+        Eliminar Evento
+      </button>
+    </div>
+  </div>
+</div>
+</div>
 
     <script>
       const apiUrlEventos = "http://127.0.0.1:8000/api/eventos/";
+
       $(document).ready(function () {
         $("#calendar").fullCalendar({
-          locale: "es", // Configuración del idioma en español
-          header: {
-            left: "prev,next today",
-            center: "title",
-            right: "month,agendaWeek,agendaDay",
-          },
-          events: async function (start, end, timezone, callback) {
-            try {
-              const token = await window.api.getToken(); // Asume que tienes esta función para obtener el token
-              const response = await fetch(apiUrlEventos, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token ? `Bearer ${token}` : "",
-                },
-              });
+  locale: "es", // Configuración del idioma en español
+  header: {
+    left: "prev,next today",
+    center: "title",
+    right: "month,agendaWeek,agendaDay",
+  },
+  events: async function (start, end, timezone, callback) {
+    try {
+      const token = await window.api.getToken();
+      const response = await fetch(apiUrlEventos, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
 
-              if (!response.ok) {
-                throw new Error("Error al cargar los eventos");
-              }
+      if (!response.ok) {
+        throw new Error("Error al cargar los eventos");
+      }
 
-              const data = await response.json();
+      const data = await response.json();
+      
+      const eventos = data.map((evento) => ({
+        title: `${evento.equipo1} vs ${evento.equipo2}`,
+        start: evento.fecha,
+        description: evento.descripcion,
+        id: evento.id,
+        color: evento.equipo1 === "Portuense F.C." || evento.equipo2 === "Portuense F.C." ? "#FF5733" : "#007bff",
+      }));
 
-              const eventos = data.map((evento) => ({
-                title: evento.titulo,
-                start: evento.fecha_inicio,
-                end: evento.fecha_fin,
-                description: evento.descripcion,
-                id: evento.id,
-              }));
+      callback(eventos);
+    } catch (error) {
+      console.error("Error al cargar los eventos:", error);
+    }
+  },
+  eventRender: function (event, element) {
+    // Aplica el color al evento desde la propiedad 'color'
+    element.css("background-color", event.color);
+  },
+  eventClick: function (event) {
+    // Abrir el modal de edición de evento
+    if (event && event.start) {
+    // Abrir el modal de edición de evento
+    $("#createEventModal").modal("show");
 
-              callback(eventos);
-            } catch (error) {
-              console.error("Error al cargar los eventos:", error);
-            }
-          },
-          eventClick: function (event) {
-            alert(
-              `Evento: ${event.titulo}\nDescripción: ${event.descripcion}\nFecha Inicio: ${event.start}\nFecha Fin: ${event.end}`
-            );
-          },
-          editable: true,
-          droppable: true,
-          dayClick: function (date, jsEvent, view) {
-            // Abrir el modal cuando se haga clic en un día
-            $("#createEventModal").modal("show");
+    // Cargar los datos del evento en el modal
+    $("#eventTitle").val(event.title);
+    $("#eventDescription").val(event.description);
+    $("#eventStart").val(event.start.format("YYYY-MM-DDTHH:mm"));
+    $("#eventEnd").val(event.end ? event.end.format("YYYY-MM-DDTHH:mm") : event.start.format("YYYY-MM-DDTHH:mm")); // Si no tiene 'end', se usa el 'start' como final
+    
+    // Guardar el ID del evento para poder editar o borrar
+    $("#createEventForm").data("eventId", event.id);
 
-            // Rellenar automáticamente la fecha de inicio y fin con el día clicado
-            $("#eventStart").val(date.format("YYYY-MM-DDTHH:mm"));
-            $("#eventEnd").val(date.add(1, "hours").format("YYYY-MM-DDTHH:mm")); // Añadir 1 hora al final por defecto
-          },
-        });
+    // Mostrar el botón de eliminar en el modal
+    $("#deleteEventBtn").show();
+  } else {
+    console.error("El evento no está definido correctamente.");
+  }
+  },
+  editable: true,
+  droppable: true,
+  dayClick: function (date, jsEvent, view) {
+    // Abre el modal de creación de evento
+    $("#createEventModal").modal("show");
+
+    // Rellenamos las fechas de inicio y fin con la fecha clicada
+    $("#eventStart").val(date.format("YYYY-MM-DDTHH:mm"));
+    $("#eventEnd").val(date.add(1, "hours").format("YYYY-MM-DDTHH:mm")); // Añadimos 1 hora al final por defecto
+
+    // Ocultamos el botón de eliminar, ya que estamos creando un nuevo evento
+    $("#deleteEventBtn").hide();
+  },
+});
+
+// Manejar el formulario de creación de eventos
+$("#createEventForm").submit(function (event) {
+  event.preventDefault();
+
+  const evento = {
+    titulo: $("#eventTitle").val(),
+    descripcion: $("#eventDescription").val(),
+    fecha_inicio: $("#eventStart").val(),
+    fecha_fin: $("#eventEnd").val(),
+  };
+
+  const token = sessionStorage.getItem("access_token");
+
+  const eventId = $("#createEventForm").data("eventId");
+
+  // Si hay un ID de evento, significa que estamos editando
+  if (eventId) {
+    // Editar evento
+    $.ajax({
+      url: `${apiUrlEventos}${eventId}/`,
+      type: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: JSON.stringify(evento),
+      contentType: "application/json",
+      success: function (data) {
+        $("#createEventModal").modal("hide");
+        $("#calendar").fullCalendar("refetchEvents"); // Recargar los eventos
+      },
+      error: function (xhr, status, error) {
+        alert("Error al editar el evento: " + error);
+      },
+    });
+  } else {
+    // Crear evento nuevo
+    $.ajax({
+      url: apiUrlEventos,
+      type: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: JSON.stringify(evento),
+      contentType: "application/json",
+      success: function (data) {
+        $("#createEventModal").modal("hide");
+        $("#calendar").fullCalendar("refetchEvents"); // Recargar los eventos
+      },
+      error: function (xhr, status, error) {
+        alert("Error al crear el evento: " + error);
+      },
+    });
+  }
+});
+
+// Manejar la eliminación de eventos
+$("#deleteEventBtn").click(function () {
+  const eventId = $("#createEventForm").data("eventId");
+
+  if (eventId) {
+    const token = sessionStorage.getItem("access_token");
+
+    // Confirmar la eliminación
+    if (confirm("¿Estás seguro de que deseas eliminar este evento?")) {
+      $.ajax({
+        url: `${apiUrlEventos}${eventId}/`,
+        type: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        success: function (data) {
+          $("#createEventModal").modal("hide");
+          $("#calendar").fullCalendar("refetchEvents"); // Recargar los eventos
+        },
+        error: function (xhr, status, error) {
+          alert("Error al eliminar el evento: " + error);
+        },
+      });
+    }
+  }
+});
 
         // Manejar el formulario de creación de eventos
         $("#createEventForm").submit(function (event) {
           event.preventDefault();
 
           const evento = {
-            titulo: $("#eventTitle").val(), // Cambiar "title" por "titulo"
-            descripcion: $("#eventDescription").val(), // Cambiar "description" por "descripcion"
-            fecha_inicio: $("#eventStart").val(), // Cambiar "start" por "fecha_inicio"
-            fecha_fin: $("#eventEnd").val(), // Cambiar "end" por "fecha_fin"
+            equipo1: $("#equipo1").val(),
+            equipo2: $("#equipo2").val(),
+            descripcion: $("#eventDescription").val(),
+            fecha: $("#eventDate").val(),
           };
 
           const token = sessionStorage.getItem("access_token");
@@ -202,23 +307,7 @@
               alert("Error al crear el evento: " + error);
             },
           });
-        });$.ajax({
-    url: apiUrlEventos,
-    type: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    },
-    data: JSON.stringify(evento),
-    success: function(data) {
-        $('#createEventModal').modal('hide');
-        $('#calendar').fullCalendar('refetchEvents'); // Recargar los eventos
-    },
-    error: function(xhr, status, error) {
-        console.error('Error al crear el evento:', xhr.responseText);
-        alert('Error al crear el evento: ' + xhr.responseText);
-    }
-});
+        });
       });
     </script>
 
