@@ -59,8 +59,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     link.textContent = pdf.nombre;  // El nombre del PDF
                     link.onclick = (e) => {
                         e.preventDefault();
-                        mostrarVistaPrevia(pdf.url);
+                        descargarPDF(pdf.archivo, pdf.nombre);  // Llamar a la función para descargar
                     };
+
+                    link.setAttribute("download", pdf.nombre);
         
                     const btnEliminar = document.createElement("button");
                     btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
@@ -80,6 +82,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
        
        
+        async function descargarPDF(pdfUrl, nombre) {
+            try {
+                // Hacemos la solicitud al servidor para obtener el archivo
+                const response = await fetch(pdfUrl, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`  // Asegúrate de que el token esté presente si es necesario
+                    }
+                });
+        
+                if (!response.ok) throw new Error("Error al obtener el archivo");
+        
+                // Convertimos el archivo a Blob
+                const blob = await response.blob();
+        
+                // Creamos un enlace para descargar el archivo
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);  // Creamos un URL del Blob
+                link.download = nombre; 
+                 // Usamos el nombre del archivo para la descarga
+        
+                // Hacemos que el enlace haga clic automáticamente para iniciar la descarga
+                link.click();
+                alert(`El archivo "${nombre}" se ha descargado exitosamente.`);
+            } catch (error) {
+                console.error("Error al descargar el PDF:", error);
+            }
+        }
         
 
         // Función para cargar las carpetas del jugador
