@@ -4,16 +4,40 @@ const apiUrlEventos = "http://127.0.0.1:8000/api/eventos/";
 
 // Variable global para almacenar el equipo actual
 let equipoActual = "M"; 
-
+let categoriaActual = ""
+let subcategoriaActual ="";
 async function getToken() {
   return await window.api.getToken(); // Obtiene el token desde el proceso principal
 }
 
-async function cargarJugadores(equipo = equipoActual) {
+async function cargarJugadores(equipo = equipoActual, categoria = categoriaActual, subcategoria=subcategoriaActual, nombre="", edadMin="", edadMax="") {
   equipoActual = equipo;
+  categoriaActual = categoria; // Guardar la categoría actual
+
   let url = apiUrl;
+  let params = [];
+
   if (equipo) {
-    url += `?equipo=${equipo}`;
+    params.push(`equipo=${equipo}`);
+  }
+  if (categoria) {
+    params.push(`categoria=${categoria}`);
+  }
+  if (subcategoria) {
+    params.push(`subcategoria=${subcategoria}`);
+  }
+  if(nombre) {
+    params.push(`nombre=${nombre}`);
+  }
+  if(edadMin) {
+    params.push(`edad_min=${edadMin}`);
+  }
+  if(edadMax) {
+    params.push(`edad_max=${edadMax}`)
+  }
+
+  if (params.length > 0) {
+    url += `?${params.join("&")}`;
   }
 
   try {
@@ -39,13 +63,11 @@ async function cargarJugadores(equipo = equipoActual) {
       $("#jugadoresList").html("<li class='list-group-item'>No hay jugadores disponibles.</li>");
     } else {
       data.forEach((jugador) => {
-        const segundoApellido = jugador.s_apellido ? jugador.s_apellido : "";
         $("#jugadoresList").append(`
           <li class="list-group-item">
             <a href="#" onclick="detalleJugador(${jugador.id})">
-              ${jugador.nombre} ${jugador.p_apellido} ${segundoApellido}
-            </a> - ${jugador.posicion} - ${jugador.edad} años -  ${jugador.categoria}
-
+              ${jugador.nombre} ${jugador.p_apellido} 
+            </a> - ${jugador.posicion} - ${jugador.edad} años -  ${jugador.categoria} ${jugador.subcategoria}
             
             <button class="btn btn-primary btn-sm float-right" onclick="editarJugador(${jugador.id})">Editar</button>
             <button class="btn btn-danger btn-sm float-right ml-2" onclick="eliminarJugador(${jugador.id})">Eliminar</button>
@@ -58,6 +80,7 @@ async function cargarJugadores(equipo = equipoActual) {
     $("#jugadoresList").html("<li class='list-group-item'>Error al cargar jugadores. Intenta nuevamente.</li>");
   }
 }
+
 
 
 
@@ -213,6 +236,11 @@ window.onclick = function (event) {
 };
 // Eliminar un jugador
 async function eliminarJugador(id) {
+  const confirmacion = confirm(" Eliminar un jugador también borrará sus carpetas y PDFs asociados. ¿Estás seguro?");
+
+  if (!confirmacion) {
+    return; // Si el usuario cancela, no se realiza la eliminación
+  }
   const token =  await getToken();
   $.ajax({
     url: `${apiUrl}${id}/`,
@@ -238,15 +266,38 @@ async function detalleJugador(id) {
 
 // Lógica para manejar el cambio de pestaña (Masculino/Femenino)
 $(document).ready(function () {
-  cargarJugadores(equipoActual); // Cargar jugadores del equipo actual
+  let nombreActual="";
+  let edadMinActual="";
+  let edadMaxActual="";
+  cargarJugadores(equipoActual,categoriaActual,subcategoriaActual,nombreActual,edadMinActual,edadMaxActual); // Cargar jugadores del equipo actual
 
+  $("#nombreBuscar").on("input",function () {
+    nombreActual = $(this).val();
+    cargarJugadores(equipoActual,categoriaActual,subcategoriaActual,nombreActual,edadMinActual,edadMaxActual)
+  });
+  $("#edadMinBuscar").on("input", function () {
+    edadMinActual = $(this).val();
+    cargarJugadores(equipoActual,categoriaActual,nombreActual,edadMinActual,edadMaxActual);
+  });
+  $("#edadMaxBuscar").on("input", function () {
+    edadMaxActual = $(this).val();
+    cargarJugadores(equipoActual,categoriaActual,nombreActual,edadMinActual,edadMaxActual);
+  })
   $("#masculino-tab").click(function () {
-    cargarJugadores("M");
+    cargarJugadores("M",categoriaActual,nombreActual,edadMinActual,edadMaxActual);
   });
 
   $("#femenino-tab").click(function () {
-    cargarJugadores("F");
+    cargarJugadores("F",categoriaActual,nombreActual,edadMinActual,edadMaxActual);
   });
+  $("#categoriaSelect").change(function () {
+    categoriaActual = $(this).val(); // Obtener la categoría seleccionada
+    cargarJugadores(equipoActual,categoriaActual,nombreActual,edadMinActual,edadMaxActual); // Recargar la lista con el nuevo filtro
+  });
+  $("#subcategoriaSelect").change(function () {
+    subcategoriaActual = $(this).val();
+    cargarJugadores(equipoActual,categoriaActual,nombreActual,edadMinActual,edadMaxActual);
+  })
 
   $("#btnAbrirCrearJugador").click(function () {
     window.api.openCreateWindow();
