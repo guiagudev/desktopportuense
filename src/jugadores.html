@@ -120,8 +120,48 @@
         <span class="close" id="closeEditModal">&times;</span>
         <h2>Editar Jugador</h2>
         <form id="editJugadorForm">
-            <input type="hidden" id="editJugadorId"> 
-            <!-- Aquí van los campos para editar el jugador -->
+            <input type="hidden" id="editJugadorId">
+
+            <label for="editNombre">Nombre:</label>
+            <input type="text" id="editNombre" name="nombre" required>
+
+            <label for="editPApellido">Primer Apellido:</label>
+            <input type="text" id="editPApellido" name="p_apellido" required>
+
+            <label for="editSApellido">Segundo Apellido:</label>
+            <input type="text" id="editSApellido" name="s_apellido">
+
+            <label for="editCategoria">Categoría:</label>
+            <select id="editCategoria" name="categoria" required>
+                <option value="PREBEN">Prebenjamín</option>
+                <option value="BEN">Benjamín</option>
+                <option value="ALE">Alevín</option>
+                <option value="INF">Infantil</option>
+                <option value="CAD">Cadete</option>
+                <option value="JUV">Juvenil</option>
+                <option value="SEN">Sénior</option>
+            </select>
+
+            <label for="editSubcategoria">Subcategoría:</label>
+            <select id="editSubcategoria" name="subcategoria" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+
+            <label for="editEquipo">Equipo:</label>
+            <select id="editEquipo" name="equipo" required>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
+
+            <label for="editPosicion">Posición:</label>
+            <input type="text" id="editPosicion" name="posicion">
+
+            <label for="editEdad">Edad:</label>
+            <input type="number" id="editEdad" name="edad">
+
+            <button type="submit">Guardar Cambios</button>
         </form>
     </div>
 </div>
@@ -156,10 +196,53 @@
         <h2>Crear Jugador</h2>
         <a href="jugadores.html">Volver</a>
         <form id="createJugadorForm">
-            <!-- Campos para crear jugador -->
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="p_apellido">Primer Apellido:</label>
+            <input type="text" id="p_apellido" name="p_apellido" required>
+
+            <label for="s_apellido">Segundo Apellido:</label>
+            <input type="text" id="s_apellido" name="s_apellido">
+
+            <label for="categoria">Categoría:</label>
+            <select id="categoria"name="categoria" required>
+                <option value="PREBEN">Prebenjamín</option>
+                <option value="BEN">Benjamín</option>
+                <option value="ALE">Alevín</option>
+                <option value="INF">Infantil</option>
+                <option value="CAD">Cadete</option>
+                <option value="JUV">Juvenil</option>
+                <option value="SEN">Sénior</option>
+            </select>
+
+            <label for="subcategoria">Subcategoría:</label>
+            <select id="subcategoria" name="subcategoria" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+
+            <label for="equipo">Equipo:</label>
+            <select id="equipo" name="equipo" required>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
+
+            <label for="posicion">Posición:</label>
+            <input type="text" id="posicion" name="posicion">
+
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad">
+
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" name="imagen">
+
+            <button type="submit">Agregar Jugador</button>
         </form>
     </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="renderer.js"></script>
