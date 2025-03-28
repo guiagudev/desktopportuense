@@ -1,6 +1,6 @@
 // Definir la URL base de la API
-const apiUrl = "http://127.0.0.1:8000/api/jugadores/";
-const apiUrlEventos = "http://127.0.0.1:8000/api/eventos/";
+const apiUrl = "http://65.20.102.238:8000/api/jugadores/";
+const apiUrlEventos = "http://65.20.102.238:8000/api/eventos/";
 
 // Variable global para almacenar el equipo actual
 let equipoActual = "M"; 

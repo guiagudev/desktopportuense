@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const jugadorId = parseInt(params.get("id"), 10);
-    const carpetasUrl = 'http://127.0.0.1:8000/api/carpetas/';
-    const jugadoresUrl = 'http://127.0.0.1:8000/api/jugadores/';
-    const pdfsUrl = 'http://127.0.0.1:8000/api/pdfs/'; // Endpoint para PDFs
+    const carpetasUrl = 'http://65.20.102.238:8000/api/carpetas/';
+    const jugadoresUrl = 'http://65.20.102.238:8000/api/jugadores/';
+    const pdfsUrl = 'http://65.20.102.238:8000/api/pdfs/'; // Endpoint para PDFs
     let carpetaSeleccionada = null;
 
     if (!jugadorId) {
@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("jugadorPosicion").textContent = jugador.posicion;
         document.getElementById("jugadorImagen").src = jugador.imagen;
         async function abrirModalPDFs(carpetaId) {
+            console.log("Intentando abrir el modal para la carpeta ID:", carpetaId); // Debugging
+        
             carpetaSeleccionada = carpetaId;
             document.getElementById("pdfList").innerHTML = "<li class='list-group-item'>Cargando...</li>";
             document.getElementById("previewContainer").style.display = "none"; // Ocultar vista previa
@@ -44,24 +46,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!response.ok) throw new Error("Error obteniendo PDFs");
         
                 const pdfs = await response.json();
-                console.log("Respuesta de PDFs:", pdfs);  // Verifica la respuesta
+                console.log("Lista de PDFs actualizada:", pdfs);  // Verificar si la respuesta llega
         
                 const pdfList = document.getElementById("pdfList");
-                pdfList.innerHTML = ""; // Limpiar la lista
+                pdfList.innerHTML = ""; // Limpiar la lista antes de actualizar
         
                 pdfs.forEach(pdf => {
-                    console.log(pdf);  // Verifica cada objeto de PDF
+                    console.log("Agregando PDF al DOM:", pdf);  // Verificar que el PDF se está añadiendo
                     const li = document.createElement("li");
                     li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
         
                     const link = document.createElement("a");
                     link.href = "#";
-                    link.textContent = pdf.nombre;  // El nombre del PDF
+                    link.textContent = pdf.nombre;
                     link.onclick = (e) => {
                         e.preventDefault();
-                        descargarPDF(pdf.archivo, pdf.nombre);  // Llamar a la función para descargar
+                        descargarPDF(pdf.archivo, pdf.nombre);
                     };
-
+        
                     link.setAttribute("download", pdf.nombre);
         
                     const btnEliminar = document.createElement("button");
@@ -76,10 +78,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         
                 const modal = new bootstrap.Modal(document.getElementById("pdfsModal"));
                 modal.show();
+        
             } catch (error) {
                 console.error("Error al cargar PDFs:", error);
             }
         }
+        
        
        
         async function descargarPDF(pdfUrl, nombre) {
@@ -240,11 +244,23 @@ document.getElementById("subirPDFBtn").addEventListener("click", async () => {
 
         alert("PDF subido correctamente");
         fileInput.value = "";  // Limpiar el input
-        abrirModalPDFs(carpetaSeleccionada); // Recargar la lista de PDFs
+
+        // 🛑 Primero, cerrar el modal para evitar problemas con Bootstrap
+        const modal = document.getElementById("pdfsModal");
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) bsModal.hide();
+        cerrarTodosLosModales();
+
+        // ⏳ Esperamos un poco antes de abrirlo de nuevo
+        setTimeout(() => {
+            abrirModalPDFs(carpetaSeleccionada);
+        }, 300); 
+
     } catch (error) {
         console.error("Error al subir PDF:", error);
     }
 });
+
 async function eliminarPDF(id) {
     if (!confirm("¿Seguro que deseas eliminar este PDF?")) return;
 
@@ -403,3 +419,18 @@ window.eliminarCarpeta = async function (id) {
         console.error("Error general:", error);
     }
 });
+function cerrarTodosLosModales() {
+    // Cierra todos los modales activos de Bootstrap
+    document.querySelectorAll('.modal.show').forEach(modal => {
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) bsModal.hide();
+    });
+
+    // 🛑 Elimina la clase modal-open que puede quedar pegada en el <body>
+    document.body.classList.remove('modal-open');
+
+    // 🧹 Limpia cualquier fondo oscuro residual de Bootstrap
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.remove();
+    });
+}

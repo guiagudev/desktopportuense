@@ -1,0 +1,91 @@
+/* Importar la tipografía AquireFont desde la carpeta 'fonts' */
+@font-face {
+    font-family: 'AquireFont'; /* Nombre de la tipografía */
+    src: url('fonts/Modern\ Age.otf') format('truetype'); /* Ruta al archivo .ttf o .otf */
+    font-weight: normal;
+    font-style: normal;
+}
+/* Títulos */
+h1 {
+    color: #ff3333;  /* Rojo neón */
+    font-family: 'AquireFont', sans-serif; /* Aplica la tipografía también en los títulos */
+    font-size: 2.5rem;  /* Tamaño del texto del título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+/* Fondo oscuro y texto blanco */
+body {
+    background-color: #111;
+    color: #fff;
+    font-family: 'AquireFont', sans-serif; /* Usamos la tipografía AquireFont */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    margin: 0;
+    position: relative; /* Necesario para posicionar el contenedor de forma absoluta */
+}
+
+/* Estilos del contenedor del formulario (flotante) */
+.container {
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 8px;
+    background-color: #222;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    position: absolute; /* Hace que el contenedor sea flotante */
+    top: 50%; /* Centra el contenedor en la mitad de la pantalla */
+    left: 50%; /* Centra el contenedor en la mitad de la pantalla */
+    transform: translate(-50%, -50%); /* Ajusta el contenedor para que se quede perfectamente centrado */
+}
+
+/* Títulos */
+h1 {
+    color: #ff3333;  /* Rojo neón */
+    font-family: 'AquireFont', sans-serif; /* Aplica la tipografía también en los títulos */
+}
+
+/* Estilo de los campos de formulario */
+.form-control {
+    background-color: #333;
+    border: 2px solid #555;
+    color: #fff;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    padding: 12px;
+}
+
+.form-control:focus {
+    background-color: #222;
+    border-color: #ff3333;
+    box-shadow: 0 0 10px #ff3333;
+    color: #fff;
+    transform: scale(1.05); /* Animación de enfoque */
+}
+
+/* Flotando los labels */
+.form-group {
+    position: relative;
+}
+
+label {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    font-size: 16px;
+    color: #aaa;
+    transition: all 0.3s ease;
+}
+
+/* Animación al enfocar el campo */
+.form-control:focus ~ label,
+.form-control:not(:placeholder-shown) ~ label {
+    top: -10px;
+    font-size: 12px;
+    color: #ff3333;
+}
+
+/* Estilos del botón */
+.btn-primary {
+    background-color: #f00c0c;
+    border
