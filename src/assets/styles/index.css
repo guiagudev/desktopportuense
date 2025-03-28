@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'AquireFont'; /* Nombre de la tipografía */
-    src: url('fonts/Modern\ Age.otf') format('truetype'); /* Ruta al archivo .ttf o .otf */
+    src: url('../fonts/Modern\ Age.otf'); /* Ruta al archivo .ttf o .otf */
     font-weight: normal;
     font-style: normal;
 }body {
