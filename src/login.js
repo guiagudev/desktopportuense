@@ -5,7 +5,7 @@ async function handleLogin(event) {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  const loginUrl = "http://65.20.102.238:8000/api/token/";
+  const loginUrl = "http://127.0.0.1:8000/api/token/";
 
   try {
       const response = await fetch(loginUrl, {

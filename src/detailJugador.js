@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const jugadorId = parseInt(params.get("id"), 10);
-    const carpetasUrl = 'http://65.20.102.238:8000/api/carpetas/';
-    const jugadoresUrl = 'http://65.20.102.238:8000/api/jugadores/';
-    const pdfsUrl = 'http://65.20.102.238:8000/api/pdfs/'; // Endpoint para PDFs
+    const carpetasUrl = 'http://127.0.0.1:8000/api/carpetas/';
+    const jugadoresUrl = 'http://127.0.0.1:8000/api/jugadores/';
+    const pdfsUrl = 'http://127.0.0.1:8000/api/pdfs/'; // Endpoint para PDFs
     let carpetaSeleccionada = null;
 
     if (!jugadorId) {

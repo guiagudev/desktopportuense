@@ -75,7 +75,7 @@
                   type="text"
                   class="form-control"
                   id="equipo1"
-                  value="Portuense F.C."
+                  value="R.C. Portuense"
                   required
                 />
               </div>
@@ -176,7 +176,7 @@
     </div>
 
     <script>
-      const apiUrlEventos = "http://65.20.102.238:8000/api/eventos/";
+      const apiUrlEventos = "http://127.0.0.1:8000/api/eventos/";
 
       $(document).ready(function () {
         // Mostrar el calendario
@@ -209,7 +209,7 @@
                 start: evento.fecha,
                 description: evento.descripcion,
                 id: evento.id,
-                color: evento.equipo1 === "Portuense F.C." || evento.equipo2 === "Portuense F.C." ? "#FF5733" : "#007bff",
+                color: evento.equipo1 === "R.C. Portuense" ||evento.equipo1 === "Racing Portuense" ||evento.equipo1 === "Portuense" ||evento.equipo2 === "R.C. Portuense" ||evento.equipo2 === "Racing Portuense" ||evento.equipo2 === "Portuense" ? "#FF5733" : "#007bff",
               }));
 
               callback(eventos);
