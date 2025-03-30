@@ -133,8 +133,8 @@ $("#createJugadorForm").submit(function (event) {
 
   // Añadimos los campos del formulario a FormData
   formData.append("nombre", $("#nombre").val());
-  formData.append("primer_apellido", $("#p_apellido").val());
-  formData.append("segundo_apellido", $("#s_apellido").val());
+  formData.append("p_apellido", $("#p_apellido").val());
+  formData.append("s_apellido", $("#s_apellido").val());
   formData.append("categoria", $("#categoria").val());
   formData.append("subcategoria", $("#subcategoria").val());
   formData.append("equipo", $("#equipo").val());
