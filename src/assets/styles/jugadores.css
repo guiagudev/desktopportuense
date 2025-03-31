@@ -245,7 +245,139 @@ h1 {
     box-shadow: 0 0 5px #ff0000;
   }
 
-/* Estilo general para la lista de navegación */
+  #editJugadorModal .modal-content {
+    background-color: #2d2c2c; /* Fondo oscuro del modal */
+    color: #ff3333; /* Texto rojo */
+    padding: 20px;
+    border-radius: 6px;
+}
+
+#editJugadorModal input,
+#editJugadorModal select {
+    background-color: #2d2c2c; /* Fondo oscuro para los inputs */
+    border: 2px solid #030303; /* Borde negro */
+    color: #ff3333; /* Texto rojo */
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+#editJugadorModal input::placeholder {
+    color: #ff3333; /* Placeholder rojo */
+}
+
+#editJugadorModal input:focus,
+#editJugadorModal select:focus {
+    border-color: #ff0000; /* Borde rojo al enfocar */
+    box-shadow: 0 0 5px #ff0000;
+}
+
+#editJugadorModal button {
+    background-color: #ff3333; /* Botón rojo */
+    color: #2d2c2c; /* Texto oscuro */
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#editJugadorModal button:hover {
+    background-color: #ff0000; /* Rojo más intenso al pasar el mouse */
+}
+
+#editJugadorModal .close {
+    color: #ff3333; /* Rojo */
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#editJugadorModal .close:hover {
+    color: #ff0000; /* Rojo más intenso */
+}
+#contenidoCrearModal {
+  background-color: #2d2c2c; /* Fondo oscuro del modal */
+  color: #ff3333; /* Texto rojo */
+  padding: 20px;
+  border-radius: 6px;
+}
+
+#createJugadorModal .modal-content {
+  background-color: #2d2c2c; /* Fondo oscuro del modal */
+  color: #ff3333; /* Texto rojo */
+  padding: 20px;
+  border-radius: 6px;
+}
+
+#createJugadorModal input,
+#createJugadorModal select,
+#createJugadorModal a {
+  background-color: #2d2c2c; /* Fondo oscuro para los inputs */
+  border: 2px solid #030303; /* Borde negro */
+  color: #ff3333; /* Texto rojo */
+  padding: 10px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+#createJugadorModal input::placeholder {
+  color: #ff3333; /* Placeholder rojo */
+}
+
+#createJugadorModal input:focus,
+#createJugadorModal select:focus {
+  border-color: #ff0000; /* Borde rojo al enfocar */
+  box-shadow: 0 0 5px #ff0000;
+}
+
+#createJugadorModal button {
+  background-color: #ff3333; /* Botón rojo */
+  color: #2d2c2c; /* Texto oscuro */
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#createJugadorModal button:hover {
+  background-color: #ff0000; /* Rojo más intenso al pasar el mouse */
+}
+
+#createJugadorModal .close {
+  color: #ff3333; /* Rojo */
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#createJugadorModal .close:hover {
+  color: #ff0000; /* Rojo más intenso */
+}
+
+#createJugadorModal a {
+  color: #ff3333; /* Rojo */
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
+}
+
+#createJugadorModal a:hover {
+  color: #ff0000; /* Rojo más intenso al pasar el mouse */
+}
+
+#contenidoCrearModal {
+  background-color: #2d2c2c; /* Fondo oscuro del modal */
+  color: #ff3333; /* Texto rojo */
+  padding: 20px;
+  border-radius: 6px;
+}
+
 
   
   /* Estilo para cada elemento de la lista */

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Jugador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/styles/detallejugador.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
@@ -19,11 +20,15 @@
         <p><strong>Posición: </strong><span id="jugadorPosicion"></span></p>
        
         <h4 class="mt-4">Carpetas</h4>
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carpetasModal">
-            Gestionar Carpetas
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carpetasModal" id="carpetasBtn">
+            
         </button>
 
-        <a href="jugadores.html" class="btn btn-secondary">Volver</a>
+        <a href="jugadores.html" class="btn btn-secondary" id="volverBtn" title="volver"><img
+            src="assets/images/logout-red.png"
+            style="width: 20px; height: 20px; margin-right: 8px"
+            alt="Cerrar Sesión"
+        /></a>
     </div>
 
     <!-- Modal para carpetas -->
@@ -39,7 +44,7 @@
                 </div>
                 <div class="modal-footer">
                     <input type="text" id="nuevaCarpetaNombre" class="form-control" placeholder="Nueva carpeta">
-                    <button class="btn btn-success" onclick="crearCarpeta()">
+                    <button class="btn btn-success" id="crearCarpetaBtn" onclick="crearCarpeta()">
                         <i class="bi bi-folder-plus"></i> Crear
                     </button>
                 </div>

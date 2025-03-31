@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
                     const btnEliminar = document.createElement("button");
                     btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+                    btnEliminar.id = "idEliminar"; 
                     btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
                     btnEliminar.onclick = () => eliminarPDF(pdf.id);
         
