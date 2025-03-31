@@ -152,14 +152,7 @@ h1 {
 }
 
 /* Estilo para el botón de crear jugador */
-#openModalBtn {
-  background-color: #ec0c0c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-}
+
 .d-flex.h1 {
   color: #ff3333;
 }
@@ -489,7 +482,7 @@ h1 {
     background-image: url("../images/white-trashcan.png");
   }
   #openModalBtn {
-    width: 10px; /* Establecer el ancho del botón */
+    width: 30px; /* Establecer el ancho del botón */
     height: 30px; /* Establecer la altura del botón para que sea un círculo */
     border-radius: 50%; /* Hacer el botón redondo */
     background-color: #fe2727; /* Color de fondo del botón */
@@ -503,9 +496,10 @@ h1 {
     align-items: center; /* Centrar el contenido verticalmente */
     cursor: pointer; /* Cambiar el cursor al pasar el ratón */
     transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
-    position:relative;
-    left: 300px;
-    
+    position:absolute;
+    left: 100px;
+    top: 20px;
+
   }
   #openModalBtn:active, #openModalBtn:focus {
     background-color: white;
