@@ -31,7 +31,7 @@ function createMainWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "src", "index.html"));
+  mainWindow.loadFile(path.join(__dirname, "src", "templates", "index.html"));
 }
 
 // Evento para añadir un jugador

@@ -23,7 +23,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
-    <link rel="stylesheet" href="assets/styles/jugadores.css">
+    <link rel="stylesheet" href="../assets/styles/jugadores.css">
   </head>
   <body>
     <a
@@ -33,7 +33,7 @@
       title="Cerrar Sesión"
     >
       <img
-        src="assets/images/logout-red.png"
+        src="../assets/images/logout-red.png"
         style="width: 20px; height: 20px; margin-right: 8px"
         alt="Cerrar Sesión"
     /></a>
@@ -139,13 +139,7 @@
       </ul>
       <button title="Añadir Jugador" id="openModalBtn"></button>
 
-      <script>
-        document
-          .getElementById("btnAbrirCrearJugador")
-          .addEventListener("click", () => {
-            window.api.openCreateWindow();
-          });
-      </script>
+      
     </div>
 
     <!-- Modal de edición de jugador -->
@@ -257,6 +251,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="renderer.js"></script>
+    <script src="../scripts/renderer.js"></script>
   </body>
 </html>

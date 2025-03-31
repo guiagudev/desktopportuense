@@ -31,7 +31,7 @@ async function handleLogin(event) {
           document.getElementById("errorMessage").textContent = "";
 
           // Redirigir a la página de jugadores
-          window.location.href = "jugadores.html";
+          window.location.href = "../templates/jugadores.html";
       } else {
           const error = await response.json();
           document.getElementById("errorMessage").textContent = error.detail || "Credenciales incorrectas";

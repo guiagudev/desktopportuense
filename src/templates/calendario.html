@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario de Eventos</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- FullCalendar Styles -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/styles/calendar.css" rel="stylesheet" />
+
+    <!-- jQuery y FullCalendar Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
+
+    <!-- FullCalendar Español (es) -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/locale/es.js"></script>
+
+    
+  </head>
+  <body>
+    <header class="card-header">
+      <a href="jugadores.html"><img
+        src="../assets/images/logout-red.png"
+        style="width: 20px; height: 20px; margin-right: 8px"
+        title="Cerrar Sesión"
+    /></a>
+    <button id="createNewEventBtn"></button>
+    </header>
+
+    <!-- Contenedor para el Calendario -->
+    <div class="container">
+      <h1 class="my-4 text-center">Calendario de Partidos</h1>
+
+      <!-- Botón para Crear Nuevo Evento -->
+     
+
+      <div id="calendar"></div>
+    </div>
+
+    <!-- Modal para Crear Nuevo Evento -->
+    <div
+      id="createEventModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="createEventModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createEventModalLabel">Crear Evento</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="createEventForm">
+              <div class="mb-3">
+                <label for="equipo1" class="form-label">Equipo 1</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="equipo1"
+                  value="R.C. Portuense"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="equipo2" class="form-label">Equipo 2</label>
+                <input type="text" class="form-control" id="equipo2" required />
+              </div>
+              <div class="mb-3">
+                <label for="eventDescription" class="form-label"
+                  >Descripción</label
+                >
+                <textarea
+                  class="form-control"
+                  id="eventDescription"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="eventDate" class="form-label">Fecha</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="eventDate"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                Crear Evento
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Editar Evento -->
+    <div
+      id="editEventModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="editEventModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editEventModalLabel">Editar Evento</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="editEventForm">
+              <div class="mb-3">
+                <label for="editEquipo1" class="form-label">Equipo 1</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editEquipo1"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editEquipo2" class="form-label">Equipo 2</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editEquipo2"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editEventDescription" class="form-label"
+                  >Descripción</label
+                >
+                <textarea
+                  class="form-control"
+                  id="editEventDescription"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="editEventDate" class="form-label">Fecha</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="editEventDate"
+                  required
+                />
+              </div>
+              <button id="deleteEventBtn" class="btn btn-danger mt-2">
+                Eliminar Evento
+              </button>
+
+              <button type="submit" class="btn btn-primary">
+                Guardar Cambios
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/calendario.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
